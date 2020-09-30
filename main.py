@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, Response
-from flask_restful import Resource, Api, fields, marshal_with
+from flask_restful import Resource, Api
 import requests, json
 
 app = Flask(__name__)
 api = Api(app)
+
+print("Github Test commit")
+
 
 # Returns all Pokemon via JSON
 @app.route('/v1/pokemon/', methods=['GET'])
