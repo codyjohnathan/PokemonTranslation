@@ -1,2 +1,2 @@
 # PokemonTranslation
-Translating any Pokemon from PokéAPI: https://pokeapi.co/ to Shakespearean 
+Translating any Pokemon description from PokéAPI: https://pokeapi.co/ to Shakespearean 
