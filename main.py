@@ -5,10 +5,8 @@ import requests, json
 app = Flask(__name__)
 api = Api(app)
 
-print("Github Test commit")
 
-
-# Returns all Pokemon via JSON
+# Returns first 150 Pokemon via JSON
 @app.route('/v1/pokemon/', methods=['GET'])
 def poke_names():
     data = []
