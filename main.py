@@ -26,7 +26,14 @@ def extract_descriptive_text(json_blob, language='en', version="sword"):
         if f['language']['name'] == language and f['version']['name'] == version: #searches through nested requests for version entry to specifiy to grab information only from red
             text.append(f['flavor_text'])
     return text
- # and  f['version']['name'] == version
+
+
+def extract_useful_info(translated):
+     text = []
+     for s in translated:
+         if s == "translated":
+             text.append(s["contents"])
+     return text
 
 
 #original pokemon name and DESCRIPTION
@@ -36,7 +43,7 @@ def get_poke(name):
     r = requests.get(descrip_url)
     json_blob = r.json()
     flav_text = extract_descriptive_text(json_blob)
-    return jsonify({'name':name}, {'description': flav_text})
+    return jsonify({'name': name}, {'description': flav_text})
 
 #sending Pokemon junk to be translated and returned
 @app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
@@ -48,6 +55,7 @@ def get_translation(name):
     trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={text_trans}"
     shakespeare = requests.get(trans_url)
     translated = shakespeare.json()
+    extract_useful_info(translated)
     return jsonify({'name': name}, {'description': translated})
 
 
