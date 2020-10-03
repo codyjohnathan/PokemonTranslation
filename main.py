@@ -32,16 +32,16 @@ def extract_descriptive_text(json_blob, language='en', version="sword"):
 #original pokemon name and DESCRIPTION
 @app.route('/pokemon/original/<string:name>/', methods=['GET'])
 def get_poke(name):
-    descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name}"
+    descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
     r = requests.get(descrip_url)
     json_blob = r.json()
     flav_text = extract_descriptive_text(json_blob)
     return jsonify({'name':name}, {'description': flav_text})
 
 #sending Pokemon junk to be translated and returned
-@app.route('/pokemon/<string:name>/', methods=['GET'])
+@app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
 def get_translation(name):
-    descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name}"
+    descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
     r = requests.get(descrip_url)
     json_blob = r.json()
     text_trans = extract_descriptive_text(json_blob)
