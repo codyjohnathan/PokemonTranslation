@@ -16,7 +16,8 @@ def poke_names():
         json = resp.json()
         data.extend(json.get('results', []))
         name_url = json.get('next')
-        if not name_url: break
+        if not name_url:
+            break
     return jsonify(data)
 
 
@@ -29,11 +30,10 @@ def extract_descriptive_text(json_blob, language='en', version="sword"):
 
 
 def extract_useful_info(translated):
-     text = []
-     for s in translated:
-         if s == "translated":
-             text.append(s["contents"])
-     return text
+    text = []
+    wanted_info = translated['contents']['translated']
+    text.append(wanted_info)
+    return text
 
 
 #original pokemon name and DESCRIPTION
@@ -43,6 +43,7 @@ def get_poke(name):
     r = requests.get(descrip_url)
     json_blob = r.json()
     flav_text = extract_descriptive_text(json_blob)
+    # clean_description = flav_text.replace("\n", " ")
     return jsonify({'name': name}, {'description': flav_text})
 
 #sending Pokemon junk to be translated and returned
@@ -55,8 +56,8 @@ def get_translation(name):
     trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={text_trans}"
     shakespeare = requests.get(trans_url)
     translated = shakespeare.json()
-    extract_useful_info(translated)
-    return jsonify({'name': name}, {'description': translated})
+    useful_info = extract_useful_info(translated)
+    return jsonify({'name': name}, {'description': useful_info})
 
 
 if __name__ == '__main__':
