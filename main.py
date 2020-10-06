@@ -5,6 +5,20 @@ import requests, json
 app = Flask(__name__)
 api = Api(app)
  
+def extract_descriptive_text(json_blob, language='en', version="sword"):
+    text = []
+    for f in json_blob['flavor_text_entries']:
+        if f['language']['name'] == language and f['version']['name'] == version: #searches through nested requests for version entry to specifiy to grab information only from red
+            text.append(f['flavor_text'])
+    return text
+
+
+def extract_useful_info(translated):
+    text = []
+    wanted_info = translated['contents']['translated']
+    text.append(wanted_info)
+    return text
+
 
 # Returns first 150 Pokemon via JSON
 @app.route('/pokemon/', methods=['GET'])
@@ -19,21 +33,6 @@ def poke_names():
         if not name_url:
             break
     return jsonify(data)
-
-
-def extract_descriptive_text(json_blob, language='en', version="sword"):
-    text = []
-    for f in json_blob['flavor_text_entries']:
-        if f['language']['name'] == language and f['version']['name'] == version: #searches through nested requests for version entry to specifiy to grab information only from red
-            text.append(f['flavor_text'])
-    return text
-
-
-def extract_useful_info(translated):
-    text = []
-    wanted_info = translated['contents']['translated']
-    text.append(wanted_info)
-    return text
 
 
 #original pokemon name and DESCRIPTION
