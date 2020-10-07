@@ -4,25 +4,45 @@ import requests, json
 
 app = Flask(__name__)
 api = Api(app)
- 
-def extract_descriptive_text(json_blob, language='en', version="sword"):
-    text = []
+
+app.config["JSON_SORT_KEYS"] = False #By default Flask will serialize JSON objects in a way that the keys are ordered, this overrides this behavior
+
+def extract_descriptive_text(json_blob, language='en', version= 'sword'):
+    """
+    Parses through nested dictionary from Poke API and grabs all flavor text entries
+    that are in english and come from the latest Pokemon game, Sword, in order to
+    get the most up to date info
+    :param json_blob:
+    :param language:
+    :param version:
+    :return:
+    """
+    text = ""
     for f in json_blob['flavor_text_entries']:
-        if f['language']['name'] == language and f['version']['name'] == version: #searches through nested requests for version entry to specifiy to grab information only from red
-            text.append(f['flavor_text'])
+        if f['language']['name'] == language and f['version']['name'] == version:
+            text = f['flavor_text'] # text.append(f['flavor_text'])
     return text
 
 
 def extract_useful_info(translated):
-    text = []
+    """
+
+    :param translated:
+    :return:
+    """
+    text = ""
     wanted_info = translated['contents']['translated']
-    text.append(wanted_info)
+    text += wanted_info
     return text
 
 
 # Returns first 150 Pokemon via JSON
 @app.route('/pokemon/', methods=['GET'])
 def poke_names():
+    """
+
+    :return:
+    """
     data = []
     name_url = "https://pokeapi.co/api/v2/pokemon?limit=151"
     while True:
@@ -34,20 +54,29 @@ def poke_names():
             break
     return jsonify(data)
 
-
 #original pokemon name and DESCRIPTION
 @app.route('/pokemon/original/<string:name>/', methods=['GET'])
 def get_poke(name):
+    """
+
+    :param name:
+    :return:
+    """
     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
     r = requests.get(descrip_url)
     json_blob = r.json()
     flav_text = extract_descriptive_text(json_blob)
     # clean_description = flav_text.replace("\n", " ")
-    return jsonify({'name': name}, {'description': flav_text})
+    return jsonify({'name': name, 'description': flav_text})
 
 #sending Pokemon junk to be translated and returned
-@app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
+@app.route('/pokemon/<string:name>/', methods=['GET'])
 def get_translation(name):
+    """
+
+    :param name:
+    :return:
+    """
     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
     r = requests.get(descrip_url)
     json_blob = r.json()
@@ -56,16 +85,11 @@ def get_translation(name):
     shakespeare = requests.get(trans_url)
     translated = shakespeare.json()
     useful_info = extract_useful_info(translated)
-    return jsonify({'name': name}, {'description': useful_info})
+    return jsonify({'name': name, 'description': useful_info})
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-#returns Pokemon names
-# @app.route('/v1/pokemon/<string:name>/title', methods=['GET'])
-# def get_poke(name):
-#      return jsonify({'name': name})
 
 
 #flavor Text ie pokemon description
@@ -81,6 +105,6 @@ if __name__ == '__main__':
 # def extract_descriptive_text(json_blob, language='en'):
 #     text = []
 #     for f in json_blob['flavor_text_entries']:
-#         if f['language']['name'] == language: #discerns what to append to our list by the criteria that it's in English
+#         if f['language']['name'] == language: #discerns what to append to our list by the criteria that it's in en
 #             text.append(f['flavor_text'])
 #     return text
