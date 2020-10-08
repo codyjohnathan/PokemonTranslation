@@ -20,7 +20,7 @@ def extract_descriptive_text(json_blob, language='en', version= 'sword'):
     text = ""
     for f in json_blob['flavor_text_entries']:
         if f['language']['name'] == language and f['version']['name'] == version:
-            text = f['flavor_text'] # text.append(f['flavor_text'])
+            text = f['flavor_text']
     return text
 
 
@@ -42,20 +42,6 @@ def poke_names():
             break
     return jsonify(data)
 
-#original pokemon name and DESCRIPTION
-# @app.route('/pokemon/original/<string:name>/', methods=['GET'])
-# def get_poke(name):
-#     """
-#
-#     :param name:
-#     :return:
-#     """
-#     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
-#     r = requests.get(descrip_url)
-#     json_blob = r.json()
-#     flav_text = extract_descriptive_text(json_blob)
-#     clean_description = flav_text.replace("\n", " ")
-#     return jsonify({'name': name, 'description': clean_description})
 
 #sending Pokemon junk to be translated and returned
 @app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
@@ -76,7 +62,6 @@ def get_translation(name):
         useful_info = shakespeare.json()['contents']['translated']
     except KeyError:
         useful_info = ''
-    # useful_info = extract_useful_info(translated)
     return jsonify({'name': name, 'description': useful_info})
 
 
