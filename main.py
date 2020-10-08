@@ -24,18 +24,6 @@ def extract_descriptive_text(json_blob, language='en', version= 'sword'):
     return text
 
 
-def extract_useful_info(translated):
-    """
-
-    :param translated:
-    :return:
-    """
-    text = ""
-    wanted_info = translated['contents']['translated']
-    text += wanted_info
-    return text
-
-
 # Returns first 150 Pokemon via JSON
 @app.route('/pokemon/', methods=['GET'])
 def poke_names():
@@ -55,22 +43,22 @@ def poke_names():
     return jsonify(data)
 
 #original pokemon name and DESCRIPTION
-@app.route('/pokemon/original/<string:name>/', methods=['GET'])
-def get_poke(name):
-    """
-
-    :param name:
-    :return:
-    """
-    descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
-    r = requests.get(descrip_url)
-    json_blob = r.json()
-    flav_text = extract_descriptive_text(json_blob)
-    # clean_description = flav_text.replace("\n", " ")
-    return jsonify({'name': name, 'description': flav_text})
+# @app.route('/pokemon/original/<string:name>/', methods=['GET'])
+# def get_poke(name):
+#     """
+#
+#     :param name:
+#     :return:
+#     """
+#     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
+#     r = requests.get(descrip_url)
+#     json_blob = r.json()
+#     flav_text = extract_descriptive_text(json_blob)
+#     clean_description = flav_text.replace("\n", " ")
+#     return jsonify({'name': name, 'description': clean_description})
 
 #sending Pokemon junk to be translated and returned
-@app.route('/pokemon/<string:name>/', methods=['GET'])
+@app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
 def get_translation(name):
     """
 
@@ -81,10 +69,14 @@ def get_translation(name):
     r = requests.get(descrip_url)
     json_blob = r.json()
     text_trans = extract_descriptive_text(json_blob)
-    trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={text_trans}"
+    clean_description = text_trans.replace("\n", " ")
+    trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={clean_description}"
     shakespeare = requests.get(trans_url)
-    translated = shakespeare.json()
-    useful_info = extract_useful_info(translated)
+    try:
+        useful_info = shakespeare.json()['contents']['translated']
+    except KeyError:
+        useful_info = ''
+    # useful_info = extract_useful_info(translated)
     return jsonify({'name': name, 'description': useful_info})
 
 
@@ -92,19 +84,15 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 
-#flavor Text ie pokemon description
-# @app.route('/v1/pokemon/<int:pokemon_id>', methods=['GET'])
-# def get_description(pokemon_id):
-#     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{pokemon_id}"
-#     r = requests.get(descrip_url)
-#     json_blob = r.json()
-#     flav_text = extract_descriptive_text(json_blob)
-#     return jsonify({'description': flav_text})
-
-
-# def extract_descriptive_text(json_blob, language='en'):
-#     text = []
-#     for f in json_blob['flavor_text_entries']:
-#         if f['language']['name'] == language: #discerns what to append to our list by the criteria that it's in en
-#             text.append(f['flavor_text'])
+# Old method for taking correct contents from translation API
+# def extract_useful_info(translated):
+#     """
+#
+#     :param translated:
+#     :return:
+#     """
+#     text = ""
+#     wanted_info = translated['contents']['translated']
+#     text += wanted_info
 #     return text
+

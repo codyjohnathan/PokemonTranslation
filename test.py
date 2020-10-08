@@ -2,5 +2,5 @@ import requests
 
 BASE = "http://127.0.0.1:5000/"
 
-response = requests.get(BASE + "/pokemon/pichu")
+response = requests.get(BASE + "/pokemon/ditto")
 print(response.json())
