@@ -1,6 +1,6 @@
-import requests #GET and PUT requests
+import requests
 
 BASE = "http://127.0.0.1:5000/"
 
-response = requests.get(BASE + "/api/v1/pokemon/all" )
+response = requests.get(BASE + "/pokemon/ditto")
 print(response.json())
