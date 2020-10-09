@@ -1,13 +1,24 @@
-from flask import Flask, jsonify, Response
-from flask_restful import Resource, Api
-import requests, json
+from flask import Flask, jsonify
+from flask_restful import Api
+import requests
+from flask_caching import Cache
 
 app = Flask(__name__)
 api = Api(app)
 
-app.config["JSON_SORT_KEYS"] = False #By default Flask will serialize JSON objects in a way that the keys are ordered, this overrides this behavior
+cache = Cache()
 
-def extract_descriptive_text(json_blob, language='en', version= 'sword'):
+
+app.config["JSON_SORT_KEYS"] = False #By default Flask will serialize JSON objects in a way that the keys are ordered, this overrides this behavior
+app.config = {
+     "CACHE_TYPE": "simple",
+     "CACHE_DEFAULT_TIMEOUT": 5
+    }
+
+cache.init_app(app)
+
+
+def extract_descriptive_text(json_blob, language='en', version= 'red'):
     """
     Parses through nested dictionary from Poke API and grabs all flavor text entries
     that are in english and come from the latest Pokemon game, Sword, in order to
@@ -61,12 +72,12 @@ def get_translation(name):
     try:
         useful_info = shakespeare.json()['contents']['translated']
     except KeyError:
-        useful_info = ''
+        useful_info = "Looks like you've exceeded server limit of 5 requests an hour!"
     return jsonify({'name': name, 'description': useful_info})
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False) #was True during development
 
 
 # Old method for taking correct contents from translation API
