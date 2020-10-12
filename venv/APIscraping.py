@@ -1,3 +1,10 @@
+import requests
+
+def clean_text(txt):
+    txt.replace("\n", " ")
+    return txt
+
+
 def extract_descriptive_text(json_blob, language='en', version= 'sword'):
     """
     Parses through nested dictionary from Poke API and grabs all flavor text entries
@@ -15,6 +22,7 @@ def extract_descriptive_text(json_blob, language='en', version= 'sword'):
     return text
 
 
-def clean_text(txt):
-    txt.replace("\n", " ")
+def json_data(url):
+    r = requests.get(url)
+    txt = r.json()
     return txt
