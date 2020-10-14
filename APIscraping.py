@@ -1,11 +1,12 @@
 import requests
 
+
 def clean_text(txt):
-    txt.replace("\n", " ")
-    return txt
+    clean = txt.replace("\n", " ")
+    return clean
 
 
-def extract_descriptive_text(json_blob, language='en', version= 'sword'):
+def extract_descriptive_text(json_blob, language='en', version='sword'):
     """
     Parses through nested dictionary from Poke API and grabs all flavor text entries
     that are in english and come from the latest Pokemon game, Sword, in order to
