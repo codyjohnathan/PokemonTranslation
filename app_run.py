@@ -43,14 +43,13 @@ def get_translation(name):
     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
     json_blob = API_scrape.json_data(descrip_url)
     text_trans = API_scrape.extract_descriptive_text(json_blob)
-    clean_description = text_trans.replace("\n", " ")
+    clean_description = API_scrape.clean_text(text_trans)
     trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={clean_description}"
-    shakespeare = requests.get(trans_url)
-    translated = shakespeare.json()
+    translated = API_scrape.json_data(trans_url)
     try:
         useful_info = translated['contents']['translated']
     except KeyError:
-        useful_info = "OPPS, Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
+        useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
     return jsonify({'name': name, 'description': useful_info})
 
 

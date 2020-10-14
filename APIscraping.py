@@ -1,9 +1,9 @@
 import requests
 
 
-def clean_text():
-    txt.replace("\n", " ")
-    return txt
+def clean_text(txt):
+    clean = txt.replace("\n", " ")
+    return clean
 
 
 def extract_descriptive_text(json_blob, language='en', version='sword'):
