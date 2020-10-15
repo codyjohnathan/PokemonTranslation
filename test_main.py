@@ -2,7 +2,7 @@ import unittest
 
 import requests
 
-from app_run import app
+from PokemonTranslation.app_run import app
 
 # import APIscraping as API_scrape
 
@@ -15,11 +15,18 @@ print(response.json())
 class Flasktest(unittest.TestCase):
 
     # checking if response of 200 is returned
-    def test_healthcheck(self):
+    def test_healthcheck_PokeAPI(self):
         manualtest = app.test_client(self)
-        response = manualtest.get("/pokemon/clefairy")
+        response = manualtest.get(BASE + "/pokemon/")
         status_code = response.status_code
         self.assertEqual(status_code, 200)
 
-    if __name__ == "__main__":
-        unittest.main()
+    def test_healthcheck_ShakespeAPI(self):
+        manualtest = app.test_client(self)
+        response = manualtest.get(BASE + "/pokemon/charizard")
+        status_code = response.status_code
+        self.assertEqual(status_code, 308)
+
+
+if __name__ == "__main__":
+    unittest.main()

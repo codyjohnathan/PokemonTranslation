@@ -1,8 +1,12 @@
-from flask import Flask, jsonify
-from flask_restful import Api
-import requests
-import APIscraping as API_scrape
-from flask_caching import Cache
+try:
+    from flask import (Flask, jsonify)
+    from flask_restful import Api
+    import requests
+    import APIscraping as API_scrape
+    from flask_caching import Cache
+
+except Exception as e:
+    print(f"Some modules are missing {e}")
 
 app = Flask(__name__)
 api = Api(app)
@@ -33,7 +37,7 @@ def poke_names():
 
 
 # sending Pokemon junk to be translated and returned
-@app.route('/pokemon/<string:name>/', methods=['GET', 'POST'])
+@app.route('/pokemon/<string:name>/', methods=['GET'])
 def get_translation(name):
     """
 
