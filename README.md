@@ -12,6 +12,6 @@ To Install:
 
 To Test: 
 1. 'cd' to the directory your test_main.py is stored in. 
-2. Run ' python3 -m unittest test_main '
+2. Run ' python3 -m unittest -v test_main '
 3. Test will also return a response for a pokemon ("/pokemon/clefairy/")
 
