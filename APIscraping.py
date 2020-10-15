@@ -2,7 +2,7 @@ try:
     import requests
 
 except Exception as e:
-    print("Some modules are missing")
+    print(f"Some modules are missing: {e}")
 
 
 def clean_text(txt):

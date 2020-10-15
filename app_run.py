@@ -58,8 +58,8 @@ def get_translation(name):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # was True during development
-
+    app.run(host='0.0.0.0', debug=False)  # was True during development
+    # app.run(host="http://localhost:5000/")
 
 #  Leftover cannon fodder from original functions
 # clean_description = text_trans.replace("\n", " ") #should be own function
