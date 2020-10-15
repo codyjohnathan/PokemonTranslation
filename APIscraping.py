@@ -1,4 +1,8 @@
-import requests
+try:
+    import requests
+
+except Exception as e:
+    print(f"Some modules are missing: {e}")
 
 
 def clean_text(txt):
