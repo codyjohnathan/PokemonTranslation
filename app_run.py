@@ -22,7 +22,7 @@ app.config["JSON_SORT_KEYS"] = False
 @app.route('/pokemon/', methods=['GET'])
 def poke_names():
     """
-
+    Grabs names and Ids from available Pokemon on PokeAPI server
     :return:
     """
     data = []
@@ -40,7 +40,7 @@ def poke_names():
 @app.route('/pokemon/<string:name>/', methods=['GET'])
 def get_translation(name):
     """
-
+    Gets pokemon name and description i.e. flavortext. Then sends the flavor text to funtranslations to be translated 
     :param name:
     :return:
     """
@@ -59,26 +59,3 @@ def get_translation(name):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=False)  # was True during development
-    # app.run(host="http://localhost:5000/")
-
-#  Leftover cannon fodder from original functions
-# clean_description = text_trans.replace("\n", " ") #should be own function
-
-
-# FIRST FUNCTION
-# resp = requests.get(name_url)
-    # json = resp.json()
-
-# SECOND FUNCTION
-# r = requests.get(descrip_url)
-# json_blob = r.json()
-
-# @app.route('/pokemon/original/<string:name>/', methods=['GET'])
-# def get_poke(name):
-#     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name}"
-#     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
-#     r = requests.get(descrip_url)
-#     json_blob = r.json()
-#     flav_text = API_scrape.extract_descriptive_text(json_blob)
-#     cleaned = API_scrape.clean_text(flav_text)
-#     return jsonify({'name':name}, {'description': cleaned})
