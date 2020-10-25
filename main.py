@@ -13,6 +13,8 @@ api = Api(app)
 
 cache = Cache(config={'CACHE_TYPE': 'simple', "CACHE_DEFAULT_TIMEOUT": 5})
 cache.init_app(app)
+# this cache needs to be tested.
+
 
 # By default Flask will serialize JSON objects in a way that the keys are ordered, this overrides this behavior
 app.config["JSON_SORT_KEYS"] = False
@@ -34,9 +36,12 @@ def poke_names():
         if not name_url:
             break
     return jsonify(data)
+# a test for this is already written ^
 
 
 # sending Pokemon junk to be translated and returned
+
+
 @app.route('/pokemon/<string:name>/', methods=['GET'])
 def get_translation(name):
     """

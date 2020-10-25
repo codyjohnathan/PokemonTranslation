@@ -1,14 +1,17 @@
 try:
-    from app_run import app
     import unittest
-
     import requests
+    target = __import__("main.py")
+    app = target.app  # this code stops the need to turn the project folder into a package
 
 except Exception as e:
     print(f"Some modules are missing: {e}")
 
-
-# import APIscraping as API_scrape
+"""
+Notes on unittest:
+-  unittest requires you put your tests in classes as methods
+- You use a series of special assertion methods in the unittest.TestCase class instead of the built-in assert statement
+"""
 
 apiBase = "http://127.0.0.1:5000/"
 
@@ -26,22 +29,21 @@ class Test_functions(unittest.TestCase):
         self.assertEqual(status_code, 200)
 
     # the status code should be a redirect i.e. 300; so I made a separate test for this
-    def test_healthcheck_ShakespeAPI(self):
+    def test_healthcheck_ShakesprAPI(self):
         manualtest = app.test_client(self)
         response = manualtest.get("/pokemon/charizard")
-        status_code = response.status_code
-        self.assertEqual(status_code, 308)
+        self.assertEqual(response.status_code, 308)
 
-    def test_json_data(self):
+    def test_response_content(self):
         manualtest = app.test_client(self)
-        response = manualtest.get(apiBase + "/pokemon/charizard")
+        response = manualtest.get("/pokemon/charizard")
         self.assertEqual(response.content_type,
-                         'application/json; charset=utf-8; text/html')
+                         'text/html; application/json')
 
     def test_trans_shakespeare_response(self):
         manualtest = app.test_client(self)
-        response = manualtest.get(apiBase + "/pokemon/charizard")
-        self.assertFalse(b"doth" in response.data)
+        response = manualtest.get("/pokemon/charizard")
+        self.assertTrue(b"doth" in response.data)
 
 
 if __name__ == "__main__":
