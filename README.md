@@ -5,6 +5,9 @@ Installing Pipenv:
 Follow instructions on linked provided below:
   https://pypi.org/project/pipenv/?fbclid=IwAR3p2n9DOf09gyHwgkxcJXxtmVe5BhW-LvORlgKZ2P5ZfDuUEoVW9p8-IIc 
 
+Alternative to using Pipenv:
+If you want to run this API with a vitural environment you can use the requirements.txt included to install the dependencies in your venv on your preferred IDE.
+
 To Install: 
 1. In terminal run pipenv shell: this should install all project depenencies on your machine
 2. In terminal run ' python3 app_run.py ' to start server. 
@@ -17,5 +20,3 @@ To Test:
 2. Run ' python3 -m unittest -v test_main '
 3. Test will also return a response for a pokemon ("/pokemon/clefairy/")
 
-Alternative to using Pipenv:
-If you want to run this API with a vitural environment you can use the requirements.txt included to install the dependencies in your venv on your preferred IDE.
