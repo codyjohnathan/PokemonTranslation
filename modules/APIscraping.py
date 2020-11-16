@@ -28,6 +28,9 @@ def extract_descriptive_text(json_blob, language='en', version='sword'):
 
 
 def json_data(url):
+    """
+    Simple method to use requests in order to jsonify whatever URL data I'm given, This is poorly worded so I should update this
+    """
     r = requests.get(url)
     txt = r.json()
     return txt

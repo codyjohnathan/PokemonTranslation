@@ -1,5 +1,5 @@
 try:
-    from flask import (Flask, jsonify)
+    from flask import (Flask, jsonify, Response)
     from flask_restful import Api
     import requests
     from modules import APIscraping as API_scrape
@@ -45,7 +45,7 @@ def poke_names():
 @app.route('/pokemon/<string:name>/', methods=['GET'])
 def get_translation(name):
     """
-    Gets pokemon name and description i.e. flavor_text. Then sends the flavor text to funtranslations to be translated 
+    Gets pokemon name and description i.e. flavor_text. Then sends the flavor text to funtranslations to be translated
     :param name:
     :return:
     """
@@ -57,9 +57,12 @@ def get_translation(name):
     translated = API_scrape.json_data(trans_url)
     try:
         useful_info = translated['contents']['translated']
+        json_finished_return = jsonify(
+            {'name': name, 'description': useful_info})
+        return Response(json_finished_return, status=200)
     except KeyError:
         useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
-    return jsonify({'name': name, 'description': useful_info})
+        return Response(useful_info, status=429)
 
 
 if __name__ == '__main__':
