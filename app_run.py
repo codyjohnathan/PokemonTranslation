@@ -1,9 +1,14 @@
 try:
+    # Flask
     from flask import (Flask, jsonify, Response)
     from flask_restful import Api
-    import requests
-    from modules import APIscraping as API_scrape
     from flask_caching import Cache
+
+    # modules from module directory
+    from modules import clean_text as Clean
+    from modules import jsonify_data as Json_data
+    from modules import extract_text as Extract
+
 
 except Exception as e:
     print(f"Some modules are missing {e}")
@@ -30,7 +35,7 @@ def poke_names():
     data = []
     name_url = "https://pokeapi.co/api/v2/pokemon?limit=151"
     while True:
-        json = API_scrape.json_data(name_url)
+        json = Json_data.json_data(name_url)
         data.extend(json.get('results', []))
         name_url = json.get('next')
         if not name_url:
@@ -50,11 +55,11 @@ def get_translation(name):
     :return:
     """
     descrip_url = f"https://pokeapi.co/api/v2/pokemon-species/{name.lower()}"
-    json_blob = API_scrape.json_data(descrip_url)
-    text_trans = API_scrape.extract_descriptive_text(json_blob)
-    clean_description = API_scrape.clean_text(text_trans)
+    json_blob = Json_data.json_data(descrip_url)
+    text_trans = Extract.extract_descriptive_text(json_blob)
+    clean_description = Clean.clean_text(text_trans)
     trans_url = f"https://api.funtranslations.com/translate/shakespeare.json?text={clean_description}"
-    translated = API_scrape.json_data(trans_url)
+    translated = Json_data.json_data(trans_url)
     try:
         useful_info = translated['contents']['translated']
         json_finished_return = jsonify(
