@@ -66,9 +66,14 @@ def get_translation(name):
             {'name': name, 'description': useful_info})
         return Response(json_finished_return, status=200)
     except KeyError:
-        useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
-        return Response(useful_info, status=429)
+        @app.errorhandler(404)
+        def not_found(error):
+            return jsonify({"error": "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"}), 429
+
+        # error handling/ old
+        # useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
+        # return Response(useful_info, status=429)
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)  # was True during development
+    app.run(host='0.0.0.0', debug=True)  # currently true for debugging
