@@ -12,4 +12,6 @@ def extract_descriptive_text(json_blob, language='en', version='sword'):
     for f in json_blob['flavor_text_entries']:
         if f['language']['name'] == language and f['version']['name'] == version:
             text = f['flavor_text']
+        else:
+            print("This entry either isn't in English or have a Pokemon version")
     return text

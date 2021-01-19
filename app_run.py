@@ -41,8 +41,6 @@ def poke_names():
         if not name_url:
             break
     return jsonify(data)
-# a test for this is already written ^
-
 
 # sending Pokemon junk to be translated and returned
 
@@ -65,14 +63,10 @@ def get_translation(name):
         json_finished_return = jsonify(
             {'name': name, 'description': useful_info})
         return Response(json_finished_return, status=200)
-    except KeyError:
-        @app.errorhandler(404)
-        def not_found(error):
-            return jsonify({"error": "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"}), 429
-
+    except (KeyError, NameError, TypeError):
         # error handling/ old
-        # useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
-        # return Response(useful_info, status=429)
+        useful_info = "Oops! Looks like you've exceeded the translation API's server limit of 5 requests an hour!"
+        return Response(useful_info, status=429)
 
 
 if __name__ == '__main__':

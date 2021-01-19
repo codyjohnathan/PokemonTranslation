@@ -2,4 +2,5 @@
 __pycache__/*
 .vscode/*
 .DS_Store
-__init__.py
+__init__.py 
+modules/__pycache__/extract_text.cpython-38.pyc
