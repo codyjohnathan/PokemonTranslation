@@ -1,4 +1,4 @@
-#PokemonTranslation
+PokemonTranslation
 Translating any Pokemon description from PokéAPI: https://pokeapi.co/ to Shakespearean from the Fun Translation API : https://funtranslations.com/api/shakespeare
 
 Installing Pipenv:
